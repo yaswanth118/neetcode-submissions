@@ -1,0 +1,102 @@
+
+#define INF 2147483647
+
+class Solution {
+   public:
+    int orangesRotting(vector<vector<int>>& v) {
+        vector<vector<int>> dis(v.size(), vector<int>(v[0].size(), INF));
+        queue<pair<int, int>> q;
+        int n = v.size();
+        int m = v[0].size();
+        
+        for (int i = 0; i < v.size(); i++) {
+            for (int j = 0; j < v[0].size(); j++) {
+                if (v[i][j] == 2) {
+                    q.push({i, j});
+                    dis[i][j] = 0;
+                }
+            }
+        }
+
+        while (!q.empty()) {
+            pair<int, int> p = q.front();
+            // cout<<p.first << " "<<p.second << endl;
+            q.pop();
+            vector<int> dx = {0, 0, 1, -1};
+            vector<int> dy = {1, -1, 0, 0};
+            for (int i = 0; i < 4; i++) {
+                if (p.first + dx[i] >= 0 && p.first + dx[i] < n && p.second + dy[i] >= 0 &&
+                    p.second + dy[i] < m) {
+                    if (v[p.first + dx[i]][p.second + dy[i]] == 1 &&
+                        dis[p.first + dx[i]][p.second + dy[i]] == INF) {
+                        q.push({p.first + dx[i], p.second + dy[i]});
+                        dis[p.first + dx[i]][p.second + dy[i]] = dis[p.first][p.second] + 1;
+                    }
+                }
+            }
+        }
+
+        int mx = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (v[i][j] == 1) {
+                    if (dis[i][j] == INF) {
+                        return -1;
+                    }
+                    mx = max(mx, dis[i][j]);
+                }
+            }
+     
+        }
+        return mx;
+    }
+    
+};
+
+// //. 0 represent empty cell
+// //  1 represent a fresh fruit
+// // 2 represetn a rotten fruit.
+
+// class Solution {
+//    public:
+//     void islandsAndTreasure(vector<vector<int>>& v) {
+//         queue<pair<int, int>> q;
+//         int n = v.size();
+//         int m = v[0].size();
+//         vector<vector<int>> dis(v.size(), vector<int>(v[0].size(), INF));
+//         for (int i = 0; i < v.size(); i++) {
+//             for (int j = 0; j < v[0].size(); j++) {
+//                 if (v[i][j] == 0) {
+//                     q.push({i, j});
+//                     dis[i][j] = 0;
+//                 }
+//             }
+//         }
+
+//         while (!q.empty()) {
+//             pair<int, int> p = q.front();
+//             cout << p.first << " " << p.second << endl;
+//             q.pop();
+//             vector<int> dx = {0, 0, 1, -1};
+//             vector<int> dy = {1, -1, 0, 0};
+//             for (int i = 0; i < 4; i++) {
+//                 if (p.first + dx[i] >= 0 && p.first + dx[i] < n && p.second + dy[i] >= 0 &&
+//                     p.second + dy[i] < m) {
+//                     if (v[p.first + dx[i]][p.second + dy[i]] == INF &&
+//                         dis[p.first + dx[i]][p.second + dy[i]] == INF) {
+//                         q.push({p.first + dx[i], p.second + dy[i]});
+//                         dis[p.first + dx[i]][p.second + dy[i]] = dis[p.first][p.second] + 1;
+//                     }
+//                 }
+//             }
+//         }
+
+//         for (int i = 0; i < n; i++) {
+//             for (int j = 0; j < m; j++) {
+//                 if (dis[i][j] != INF) {
+//                     v[i][j] = dis[i][j];
+//                 }
+//             }
+//         }
+//     }
+// };
